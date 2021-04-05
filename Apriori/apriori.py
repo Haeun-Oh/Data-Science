@@ -45,7 +45,7 @@ def apriori(total_item_db, min_sup_cnt, transaction):
         for item_set in transaction:
             for item in candidate_item_db:
                 tuple_item = tuple(item)
-                if len(set().union(tuple_item, item_set)) == len(item_set):
+                if set(tuple_item) <= set(item_set): # candidate의 item이 transaction의 item set에 포함된다면
                     if tuple_item in frequent_item_db:
                         frequent_item_db[tuple_item] += 1
                     else:
