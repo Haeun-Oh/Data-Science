@@ -10,4 +10,4 @@ The association rule is applied to each set of frequent items to obtain support 
 * Language: Python 3.8.5
 
 ### How to Run
-apriori.py {minimumsupport} {input file name} {ouput file name}
+apriori.py {minimum support} {input file name} {ouput file name}
