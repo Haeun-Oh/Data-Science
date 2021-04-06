@@ -58,13 +58,10 @@ def association_rule(total_item_db, transaction_num):
     output = ""
     for i in range(1, len(total_item_db)):
         for item in total_item_db[i]:
-            print("item", item)
             for size in range(1, i + 1):
                 tmp_comb = list(itertools.combinations(item, size))
-                print("tmp_comb", i, tmp_comb)
                 for condition_item in tmp_comb:
                     result_item = list(item)
-                    print("result_item", result_item)
                     result_item = tuple([x for x in result_item if x not in condition_item])
                     support = (total_item_db[i][item]/transaction_num)*100
                     confidence = (total_item_db[i][item]/total_item_db[len(set(condition_item))-1][condition_item])*100
