@@ -1,12 +1,12 @@
 import sys
 import itertools
 
-# minimum support보다 빈도수가 작을 시 db에서 삭제
+# minimum support보다 빈도수가 크거나 같은 item만 return
+# for문을 이용해서 해결하려고 하였으나 for문을 돌리는 중에 dict 사이즈가 변경되면 안된다.
+# 따라서 dict안의 sub-dict를 뽑아낸다.
 def filtering(item_db, min_sup_cnt):
-    for key, val in item_db.items():
-        if val < min_sup_cnt:
-          del item_db[key]
-    return item_db
+    frequent_set = {key: item_db[key] for key in item_db.keys() if item_db[key]>=min_sup_cnt}
+    return frequent_set
 
 # 후보(Candidate)들 중 k-빈번항목집합에 없는 item을 갖고 있는 것이 있으면 삭제
 def prune(candidate, prev_cnt, prev_list):
@@ -52,15 +52,19 @@ def apriori(total_item_db, min_sup_cnt, transaction):
                         frequent_item_db[tuple_item] = 1
         total_item_db.append(filtering(frequent_item_db, min_sup_cnt))
         cnt+=1
+        k_th+=1
 
 def association_rule(total_item_db, transaction_num):
     output = ""
     for i in range(1, len(total_item_db)):
         for item in total_item_db[i]:
+            print("item", item)
             for size in range(1, i + 1):
                 tmp_comb = list(itertools.combinations(item, size))
+                print("tmp_comb", i, tmp_comb)
                 for condition_item in tmp_comb:
-                    result_item = list(item).copy()
+                    result_item = list(item)
+                    print("result_item", result_item)
                     result_item = tuple([x for x in result_item if x not in condition_item])
                     support = (total_item_db[i][item]/transaction_num)*100
                     confidence = (total_item_db[i][item]/total_item_db[len(set(condition_item))-1][condition_item])*100
